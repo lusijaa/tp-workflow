@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nersio — Course Production Workflow</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#f4f3ef;--surface:#fff;--border:#e0ddd6;--border2:#ccc9c0;
+  --text:#1c1b18;--text2:#5c5a54;--text3:#9a9890;
+  --ai-bg:#e8f0fd;--ai-b:#3a62d4;--ai-t:#162e6e;
+  --opp-bg:#fef3dc;--opp-b:#d4900a;--opp-t:#5a3800;
+  --man-bg:#f0efea;--man-b:#9a9890;--man-t:#3a3a35;
+  --rev-bg:#fdeaea;--rev-b:#c83030;--rev-t:#5a1010;
+  --hdr:#1a1928;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:40px 32px 80px;}
+.page-header{margin-bottom:24px;}
+.eyebrow{font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--text3);margin-bottom:8px;}
+h1{font-size:26px;font-weight:600;letter-spacing:-.5px;}
+.subtitle{font-size:13px;color:var(--text2);margin-top:4px;}
+.controls{background:var(--surface);border:.5px solid var(--border);border-radius:12px;padding:16px 20px;margin-bottom:18px;display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start;}
+.cg{display:flex;flex-direction:column;gap:6px;}
+.cl{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);}
+.fr{display:flex;flex-wrap:wrap;gap:5px;}
+.fb{font-family:'DM Sans',sans-serif;font-size:11px;padding:4px 12px;border-radius:16px;border:.5px solid var(--border2);background:var(--surface);color:var(--text2);cursor:pointer;transition:all .12s;}
+.fb:hover{border-color:var(--text);color:var(--text);}
+.fb.active{background:var(--text);color:var(--surface);border-color:var(--text);}
+.stats{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;}
+.stat{background:var(--surface);border:.5px solid var(--border);border-radius:8px;padding:9px 14px;min-width:90px;}
+.stat-n{font-size:20px;font-weight:600;letter-spacing:-1px;}
+.stat-l{font-size:10px;color:var(--text3);margin-top:1px;}
+.phases{display:flex;flex-direction:column;gap:8px;}
+.phase{background:var(--surface);border:.5px solid var(--border);border-radius:12px;overflow:hidden;transition:opacity .15s;}
+.phase.hidden{display:none;}
+.ph{background:var(--hdr);padding:11px 18px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;}
+.pt{font-size:13px;font-weight:600;color:#fff;}
+.pr{display:flex;align-items:center;gap:10px;}
+.pc{font-size:10px;color:rgba(255,255,255,.45);}
+.ptag{font-size:10px;font-weight:500;padding:2px 9px;border-radius:10px;}
+.ptag.ai{background:rgba(232,240,253,.18);color:#b5c9f8;border:.5px solid rgba(181,201,248,.3);}
+.ptag.man{background:rgba(240,239,234,.12);color:#b0ada6;border:.5px solid rgba(176,173,166,.3);}
+.chev{color:rgba(255,255,255,.35);font-size:12px;transition:transform .18s;}
+.chev.open{transform:rotate(90deg);}
+.pb{padding:14px 18px;}
+.pb.collapsed{display:none;}
+.steps{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:8px;margin-bottom:10px;}
+.step{border-radius:8px;padding:11px 13px;border:.5px solid transparent;transition:transform .12s;}
+.step:hover{transform:translateY(-1px);}
+.step.hidden{display:none;}
+.step.ai  {background:var(--ai-bg);border-color:var(--ai-b);}
+.step.opp {background:var(--opp-bg);border-color:var(--opp-b);}
+.step.man {background:var(--man-bg);border-color:var(--man-b);}
+.step.rev {background:var(--rev-bg);border-color:var(--rev-b);}
+.sn{font-size:12px;font-weight:500;margin-bottom:3px;line-height:1.3;}
+.step.ai  .sn{color:var(--ai-t);}
+.step.opp .sn{color:var(--opp-t);}
+.step.man .sn{color:var(--man-t);}
+.step.rev .sn{color:var(--rev-t);}
+.st{font-size:10px;opacity:.7;line-height:1.4;margin-bottom:4px;}
+.step.ai  .st{color:var(--ai-t);}
+.step.opp .st{color:var(--opp-t);}
+.step.man .st{color:var(--man-t);}
+.step.rev .st{color:var(--rev-t);}
+.sl{font-size:10px;font-weight:500;font-family:'DM Mono',monospace;line-height:1.3;}
+.step.ai  .sl{color:var(--ai-b);}
+.step.opp .sl{color:var(--opp-b);}
+.step.man .sl{color:var(--man-b);}
+.step.rev .sl{color:var(--rev-b);}
+.rb{display:flex;align-items:center;gap:8px;background:var(--rev-bg);border:.5px solid var(--rev-b);border-radius:6px;padding:7px 13px;font-size:11px;font-weight:500;color:var(--rev-t);}
+.rb::before{content:"↻";font-size:13px;flex-shrink:0;}
+.ep{padding:10px 18px;font-size:12px;color:var(--text3);font-style:italic;}
+footer{margin-top:32px;padding-top:14px;border-top:.5px solid var(--border);font-size:11px;color:var(--text3);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="eyebrow">Nersio · Training Production</div>
+  <h1>Course Production Workflow</h1>
+  <p class="subtitle">End-to-end map with AI status per step · April 2026</p>
+</div>
+
+<div class="controls">
+  <div class="cg">
+    <div class="cl">AI status</div>
+    <div class="fr">
+      <button class="fb active" data-f="status" data-v="all">All</button>
+      <button class="fb" data-f="status" data-v="ai">AI in use</button>
+      <button class="fb" data-f="status" data-v="opp">AI opportunity</button>
+      <button class="fb" data-f="status" data-v="man">Manual</button>
+      <button class="fb" data-f="status" data-v="rev">Review gate</button>
+    </div>
+  </div>
+  <div class="cg">
+    <div class="cl">Phase</div>
+    <div class="fr">
+      <button class="fb active" data-f="phase" data-v="all">All</button>
+      <button class="fb" data-f="phase" data-v="01">01 Brief</button>
+      <button class="fb" data-f="phase" data-v="02">02 Storyboard</button>
+      <button class="fb" data-f="phase" data-v="03">03 Branding</button>
+      <button class="fb" data-f="phase" data-v="04">04 Production</button>
+      <button class="fb" data-f="phase" data-v="05">05 Prototype</button>
+      <button class="fb" data-f="phase" data-v="06">06 LMS upload</button>
+      <button class="fb" data-f="phase" data-v="07">07 QA &amp; deploy</button>
+    </div>
+  </div>
+</div>
+
+<div class="stats" id="stats"></div>
+
+<div class="phases">
+
+<div class="phase" data-phase="01">
+  <div class="ph" onclick="tog(this)">
+    <span class="pt">01 — Brief &amp; analysis</span>
+    <div class="pr"><span class="pc" id="c01"></span><span class="ptag ai">AI-assisted</span><span class="chev open">›</span></div>
+  </div>
+  <div class="pb">
+    <div class="steps">
+      <div class="step man" data-s="man"><div class="sn">Project brief intake</div><div class="st">Meeting / Document / ClickUp</div><div class="sl">No AI currently</div></div>
+      <div class="step ai"  data-s="ai" ><div class="sn">Content analysis</div><div class="st">Claude — id-content-analysis</div><div class="sl">AI: fully assisted</div></div>
+      <div class="step opp" data-s="opp"><div class="sn">Audience &amp; goal definition</div><div class="st">Word / Excel / PDF</div><div class="sl">Opportunity: Claude drafts from brief</div></div>
+      <div class="step opp" data-s="opp"><div class="sn">Course structure + objectives</div><div class="st">Excel / Word / PDF</div><div class="sl">Opportunity: template by training type</div></div>
+    </div>
+    <div class="rb" data-s="rev">Structure reviewed and approved by client before proceeding</div>
+  </div>
+</div>
+
+<div class="phase" data-phase="02">
+  <div class="ph" onclick="tog(this)">
+    <span class="pt">02 — Storyboard creation</span>
+    <div class="pr"><span class="pc" id="c02"></span><span class="ptag ai">AI-assisted</span><span class="chev open">›</span></div>
+  </div>
+  <div class="pb">
+    <div class="steps">
+      <div class="step ai"  data-s="ai" ><div class="sn">Content transformation</div><div class="st">PPT + Claude</div><div class="sl">AI: structuring, rewriting, chunking</div></div>
+      <div class="step ai"  data-s="ai" ><div class="sn">Assessment creation</div><div class="st">PPT + Claude — id-quiz-generator</div><div class="sl">AI: quiz generation, D&amp;D tasks</div></div>
+      <div class="step opp" data-s="opp"><div class="sn">Grammar &amp; tone check</div><div class="st">PPT</div><div class="sl">Opportunity: checklist review prompt</div></div>
+      <div class="step opp" data-s="opp"><div class="sn">Internal SB review</div><div class="st">Manual check</div><div class="sl">Opportunity: structured QA via Claude</div></div>
+    </div>
+    <div class="rb" data-s="rev">Storyboard reviewed and approved by client — feedback applied, re-submitted</div>
+  </div>
+</div>
+
+<div class="phase" data-phase="03">
+  <div class="ph" onclick="tog(this)">
+    <span class="pt">03 — Visual setup &amp; branding</span>
+    <div class="pr"><span class="pc" id="c03"></span><span class="ptag ai">AI-assisted</span><span class="chev open">›</span></div>
+  </div>
+  <div class="pb">
+    <div class="steps">
+      <div class="step opp" data-s="opp"><div class="sn">Figma project setup</div><div class="st">Figma</div><div class="sl">Opportunity: plugin can scaffold this</div></div>
+      <div class="step opp" data-s="opp"><div class="sn">Moodboard + font selection</div><div class="st">Figma (Segoe UI / Montserrat / Poppins / Aleo)</div><div class="sl">Opportunity: Claude suggests palette from brief</div></div>
+      <div class="step man" data-s="man"><div class="sn">Color &amp; branding decisions</div><div class="st">Figma</div><div class="sl">Manual — client taste dependent</div></div>
+      <div class="step opp" data-s="opp"><div class="sn">Training-type specific assets</div><div class="st">Figma — headers, icons, badges, paths</div><div class="sl">Opportunity: plugin automation per type</div></div>
+    </div>
+    <div class="rb" data-s="rev">First look approved by client before production starts</div>
+  </div>
+</div>
+
+<div class="phase" data-phase="04">
+  <div class="ph" onclick="tog(this)">
+    <span class="pt">04 — Prototyping (Figma &amp; co.) — visuals &amp; media</span>
+    <div class="pr"><span class="pc" id="c04"></span><span class="ptag ai">AI-assisted</span><span class="chev open">›</span></div>
+  </div>
+  <div class="pb">
+    <div class="steps">
+      <div class="step ai"  data-s="ai" ><div class="sn">Figma structure (plugin)</div><div class="st">Figma + id-figma-structure-builder</div><div class="sl">AI: plugin automates scaffolding</div></div>
+      <div class="step ai"  data-s="ai" ><div class="sn">SVG / PNG / WebP visuals</div><div class="st">Figma + Freepik / Storyset / Claude / Recraft / Quiver AI</div><div class="sl">AI: generation + adaptation</div></div>
+      <div class="step opp" data-s="opp"><div class="sn">GIF creation</div><div class="st">Jitter (explore Rive, Lottie)</div><div class="sl">Opportunity: Jitter AI motion features</div></div>
+      <div class="step ai"  data-s="ai" ><div class="sn">Video production</div><div class="st">Canva / Jitter / Rotato + DaVinci Resolve</div><div class="sl">AI: HeyGen avatars, ElevenLabs voice, Freepik video</div></div>
+      <div class="step opp" data-s="opp"><div class="sn">PDF creation</div><div class="st">Figma now → Gamma (goal)</div><div class="sl">Opportunity: Gamma fully AI-generated</div></div>
+      <div class="step ai"  data-s="ai" ><div class="sn">D&amp;D creation</div><div class="st">Claude — id-dragdrop-generator skill</div><div class="sl">AI: fully generated</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="phase" data-phase="05">
+  <div class="ph" onclick="tog(this)">
+    <span class="pt">05 — Prototype assembly &amp; review</span>
+    <div class="pr"><span class="pc" id="c05"></span><span class="ptag man">Manual</span><span class="chev open">›</span></div>
+  </div>
+  <div class="pb">
+    <div class="steps">
+      <div class="step opp" data-s="opp"><div class="sn">Visuals → PPT (prototype)</div><div class="st">Manual copy-paste — Figma + PPT</div><div class="sl">⚠ Biggest friction — automation needed urgently</div></div>
+      <div class="step opp" data-s="opp"><div class="sn">Internal QA</div><div class="st">Manual review</div><div class="sl">Opportunity: structured QA checklist via Claude</div></div>
+    </div>
+    <div class="rb" data-s="rev">Prototype reviewed and approved by client — feedback applied, re-submitted</div>
+  </div>
+</div>
+
+<div class="phase" data-phase="06">
+  <div class="ph" onclick="tog(this)">
+    <span class="pt">06 — Production</span>
+    <div class="pr"><span class="pc" id="c06"></span><span class="ptag man">Manual</span><span class="chev open">›</span></div>
+  </div>
+  <div class="pb">
+    <div class="steps">
+      <div class="step opp" data-s="opp"><div class="sn">Export assets from Figma</div><div class="st">Figma manual export</div><div class="sl">Opportunity: bulk export + auto-naming via plugin</div></div>
+      <div class="step opp" data-s="opp"><div class="sn">CMS structure creation</div><div class="st">CMS / LMS — manual</div><div class="sl">Opportunity: structure from storyboard JSON</div></div>
+      <div class="step opp" data-s="opp"><div class="sn">Content + media upload</div><div class="st">CMS — step by step, manual</div><div class="sl">Opportunity: bulk import with slot placement</div></div>
+      <div class="step ai"  data-s="ai" ><div class="sn">Quiz / D&amp;D upload</div><div class="st">CMS + JSON + SVG</div><div class="sl">AI: JSON already generated by Claude</div></div>
+    </div>
+    <div class="rb" data-s="rev">Content uploaded step-by-step from final approved prototype</div>
+  </div>
+</div>
+
+<div class="phase" data-phase="07">
+  <div class="ph" onclick="tog(this)">
+    <span class="pt">07 — QA, client review &amp; deployment</span>
+    <div class="pr"><span class="pc" id="c07"></span><span class="ptag man">Manual</span><span class="chev open">›</span></div>
+  </div>
+  <div class="pb">
+    <div class="steps">
+      <div class="step opp" data-s="opp"><div class="sn">Internal QA (published)</div><div class="st">LMS preview + manual</div><div class="sl">Opportunity: QA checklist automation</div></div>
+      <div class="step opp" data-s="opp"><div class="sn">Client review + feedback</div><div class="st">LMS + email / comments</div><div class="sl">Opportunity: feedback response via Claude</div></div>
+      <div class="step man" data-s="man"><div class="sn">Fixes &amp; final approval</div><div class="st">CMS + Figma</div><div class="sl">Manual — judgment required</div></div>
+      <div class="step man" data-s="man"><div class="sn">Deploy to learners</div><div class="st">LMS / org admin</div><div class="sl">Manual — client-side action</div></div>
+    </div>
+    <div class="rb" data-s="rev">Feedback applied → re-published → final sign-off → deployed</div>
+  </div>
+</div>
+
+</div>
+
+<footer>
+  <span>Nersio · Course Production Workflow · April 2026</span>
+  <span>7 phases · Filter by AI status or phase</span>
+</footer>
+
+<script>
+let fs='all', fp='all';
+
+function tog(h){
+  const b=h.nextElementSibling, c=h.querySelector('.chev');
+  const o=!b.classList.contains('collapsed');
+  b.classList.toggle('collapsed',o);
+  c.classList.toggle('open',!o);
+}
+
+document.querySelectorAll('.fb').forEach(b=>{
+  b.addEventListener('click',()=>{
+    const f=b.dataset.f, v=b.dataset.v;
+    if(f==='status') fs=v;
+    if(f==='phase')  fp=v;
+    document.querySelectorAll(`[data-f="${f}"]`).forEach(x=>x.classList.toggle('active',x.dataset.v===v));
+    render();
+  });
+});
+
+function render(){
+  let total=0,aiN=0,oppN=0,manN=0,revN=0;
+  document.querySelectorAll('.phase').forEach(ph=>{
+    const pn=ph.dataset.phase;
+    if(fp!=='all'&&fp!==pn){ph.classList.add('hidden');return;}
+    ph.classList.remove('hidden');
+    let vis=0;
+    ph.querySelectorAll('.step').forEach(s=>{
+      const show=fs==='all'||fs===s.dataset.s;
+      s.classList.toggle('hidden',!show);
+      if(show){vis++;total++;
+        if(s.dataset.s==='ai') aiN++;
+        else if(s.dataset.s==='opp') oppN++;
+        else if(s.dataset.s==='man') manN++;
+      }
+    });
+    ph.querySelectorAll('.rb').forEach(r=>{
+      const show=fs==='all'||fs==='rev';
+      r.style.display=show?'':'none';
+      if(show){revN++;total++;}
+    });
+    let ep=ph.querySelector('.ep');
+    if(vis===0&&fs!=='rev'){
+      if(!ep){ep=document.createElement('div');ep.className='ep';ph.querySelector('.steps').after(ep);}
+      ep.textContent='No steps match this filter in this phase';ep.style.display='';
+    } else if(ep) ep.style.display='none';
+    const cEl=document.getElementById('c'+pn);
+    if(cEl){
+      const sv=ph.querySelectorAll('.step:not(.hidden)').length;
+      const tv=ph.querySelectorAll('.step').length;
+      cEl.textContent=fs==='all'?tv+' steps':sv+'/'+tv;
+    }
+  });
+  const s=document.getElementById('stats');
+  const items=[
+    {n:total,l:'visible'},
+    {n:aiN,l:'AI in use',hide:fs!=='all'&&fs!=='ai'},
+    {n:oppN,l:'opportunities',hide:fs!=='all'&&fs!=='opp'},
+    {n:manN,l:'manual',hide:fs!=='all'&&fs!=='man'},
+    {n:revN,l:'review gates',hide:fs!=='all'&&fs!=='rev'},
+  ];
+  s.innerHTML=items.filter(i=>!i.hide).map(i=>`<div class="stat"><div class="stat-n">${i.n}</div><div class="stat-l">${i.l}</div></div>`).join('');
+}
+render();
+</script>
+</body>
+</html>

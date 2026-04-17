@@ -6,139 +6,326 @@
 <title>Nersio — AI Opportunity Audit</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg: #f7f6f3;
-  --surface: #ffffff;
-  --surface2: #f0efe9;
-  --border: #e2e0d8;
-  --border2: #cccac0;
-  --text: #1a1a18;
-  --text2: #5a5852;
-  --text3: #9a9890;
-  --id-bg: #eaf1fd; --id-border: #3d6fd4; --id-text: #1a3a7a;
-  --dd-bg: #eeeafd; --dd-border: #6b55d4; --dd-text: #2d1a7a;
-  --both-bg: #e8f8f0; --both-border: #1f9e6a; --both-text: #0a3d28;
-  --high-bg: #e8f5dc; --high-border: #4a8a1a; --high-text: #234008;
-  --med-bg: #fdf2dc; --med-border: #c47a10; --med-text: #5a3200;
-  --low-bg: #f0efea; --low-border: #88877e; --low-text: #3a3a35;
-  --now-bg: #e4f2fd; --now-border: #2878c8; --now-text: #0a3560;
-  --near-bg: #eeeafd; --near-border: #6b55d4; --near-text: #2d1a7a;
-  --effort-low-bg: #e8f8f0; --effort-low-text: #0a3d28;
-  --effort-med-bg: #fdf2dc; --effort-med-text: #5a3200;
-  --effort-high-bg: #fdeaea; --effort-high-text: #5a1010;
-  --accent: #2d5be3;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 40px 24px 80px; }
-.container { max-width: 960px; margin: 0 auto; }
-header { margin-bottom: 36px; }
-.eyebrow { font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text3); margin-bottom: 10px; }
-h1 { font-size: 28px; font-weight: 600; letter-spacing: -0.5px; margin-bottom: 6px; }
-.subtitle { font-size: 14px; color: var(--text2); line-height: 1.6; }
-.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 28px; }
-.stat { background: var(--surface); border: 0.5px solid var(--border); border-radius: 10px; padding: 14px 16px; }
-.stat-n { font-size: 26px; font-weight: 600; letter-spacing: -1px; color: var(--text); }
-.stat-l { font-size: 12px; color: var(--text3); margin-top: 3px; }
-.filter-section { margin-bottom: 24px; }
-.filter-group { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
-.filter-label { font-size: 11px; font-weight: 500; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
-.filter-btn { font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 400; padding: 5px 13px; border-radius: 20px; border: 0.5px solid var(--border2); background: var(--surface); color: var(--text2); cursor: pointer; transition: all 0.12s; }
-.filter-btn:hover { border-color: var(--accent); color: var(--accent); }
-.filter-btn.active { background: var(--text); color: var(--surface); border-color: var(--text); }
-.reset-btn { font-family: 'DM Sans', sans-serif; font-size: 12px; padding: 5px 13px; border-radius: 20px; border: 0.5px solid var(--border2); background: transparent; color: var(--text3); cursor: pointer; margin-left: 4px; }
-.reset-btn:hover { color: var(--text); border-color: var(--text); }
-.section-head { font-size: 11px; font-weight: 500; color: var(--text3); text-transform: uppercase; letter-spacing: 0.1em; margin: 28px 0 10px; padding-bottom: 8px; border-bottom: 0.5px solid var(--border); }
-.card { background: var(--surface); border: 0.5px solid var(--border); border-radius: 12px; padding: 16px 18px; margin-bottom: 8px; transition: border-color 0.12s; }
-.card:hover { border-color: var(--border2); }
-.card-top { display: flex; align-items: flex-start; gap: 12px; flex-wrap: wrap; }
-.card-left { flex: 1; min-width: 160px; }
-.card-title { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
-.card-phase { font-size: 11px; color: var(--text3); }
-.badges { display: flex; flex-wrap: wrap; gap: 5px; }
-.badge { font-size: 10px; font-weight: 500; padding: 3px 9px; border-radius: 10px; white-space: nowrap; }
-.divider { height: 0.5px; background: var(--border); margin: 12px 0; }
-.card-how { font-size: 13px; color: var(--text2); line-height: 1.6; }
-.tools { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px; }
-.tool-tag { font-family: 'DM Mono', monospace; font-size: 10px; padding: 3px 8px; border-radius: 6px; background: var(--surface2); color: var(--text2); border: 0.5px solid var(--border); }
-.empty { text-align: center; padding: 48px 24px; color: var(--text3); font-size: 14px; background: var(--surface); border-radius: 12px; border: 0.5px solid var(--border); }
-.priority-flag { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; font-weight: 500; padding: 2px 8px; border-radius: 10px; background: #fff3cd; color: #7a4800; border: 0.5px solid #e8a800; }
-footer { margin-top: 48px; padding-top: 20px; border-top: 0.5px solid var(--border); font-size: 12px; color: var(--text3); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
-@media (max-width: 600px) { .stats { grid-template-columns: repeat(2,1fr); } h1 { font-size: 22px; } }
+  :root {
+    --bg: #f7f6f3;
+    --surface: #ffffff;
+    --surface2: #f0efe9;
+    --border: #e2e0d8;
+    --border2: #cccac0;
+    --text: #1a1a18;
+    --text2: #5a5852;
+    --text3: #9a9890;
+    --id-bg: #eaf1fd; --id-border: #3d6fd4; --id-text: #1a3a7a;
+    --dd-bg: #eeeafd; --dd-border: #6b55d4; --dd-text: #2d1a7a;
+    --both-bg: #e8f8f0; --both-border: #1f9e6a; --both-text: #0a3d28;
+    --high-bg: #e8f5dc; --high-border: #4a8a1a; --high-text: #234008;
+    --med-bg: #fdf2dc; --med-border: #c47a10; --med-text: #5a3200;
+    --low-bg: #f0efea; --low-border: #88877e; --low-text: #3a3a35;
+    --now-bg: #e4f2fd; --now-border: #2878c8; --now-text: #0a3560;
+    --near-bg: #eeeafd; --near-border: #6b55d4; --near-text: #2d1a7a;
+    --effort-low-bg: #e8f8f0; --effort-low-text: #0a3d28;
+    --effort-med-bg: #fdf2dc; --effort-med-text: #5a3200;
+    --effort-high-bg: #fdeaea; --effort-high-text: #5a1010;
+    --accent: #2d5be3;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 40px 24px 80px;
+  }
+
+  .container { max-width: 960px; margin: 0 auto; }
+
+  header { margin-bottom: 36px; }
+  .eyebrow {
+    font-size: 11px; font-weight: 500; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--text3); margin-bottom: 10px;
+  }
+  h1 { font-size: 28px; font-weight: 600; letter-spacing: -0.5px; margin-bottom: 6px; }
+  .subtitle { font-size: 14px; color: var(--text2); line-height: 1.6; }
+
+  .stats {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 10px; margin-bottom: 28px;
+  }
+  .stat {
+    background: var(--surface); border: 0.5px solid var(--border);
+    border-radius: 10px; padding: 14px 16px;
+  }
+  .stat-n { font-size: 26px; font-weight: 600; letter-spacing: -1px; color: var(--text); }
+  .stat-l { font-size: 12px; color: var(--text3); margin-top: 3px; }
+
+  .filter-section { margin-bottom: 24px; }
+  .filter-group { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+  .filter-label { font-size: 11px; font-weight: 500; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
+
+  .filter-btn {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px; font-weight: 400;
+    padding: 5px 13px; border-radius: 20px;
+    border: 0.5px solid var(--border2);
+    background: var(--surface); color: var(--text2);
+    cursor: pointer; transition: all 0.12s;
+  }
+  .filter-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .filter-btn.active {
+    background: var(--text); color: var(--surface);
+    border-color: var(--text);
+  }
+
+  .reset-btn {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px; padding: 5px 13px; border-radius: 20px;
+    border: 0.5px solid var(--border2);
+    background: transparent; color: var(--text3);
+    cursor: pointer; margin-left: 4px;
+  }
+  .reset-btn:hover { color: var(--text); border-color: var(--text); }
+
+  .section-head {
+    font-size: 11px; font-weight: 500; color: var(--text3);
+    text-transform: uppercase; letter-spacing: 0.1em;
+    margin: 28px 0 10px; padding-bottom: 8px;
+    border-bottom: 0.5px solid var(--border);
+  }
+
+  .card {
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: 12px; padding: 16px 18px;
+    margin-bottom: 8px;
+    transition: border-color 0.12s;
+  }
+  .card:hover { border-color: var(--border2); }
+
+  .card-top { display: flex; align-items: flex-start; gap: 12px; flex-wrap: wrap; }
+  .card-left { flex: 1; min-width: 160px; }
+  .card-title { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
+  .card-phase { font-size: 11px; color: var(--text3); }
+
+  .badges { display: flex; flex-wrap: wrap; gap: 5px; }
+  .badge {
+    font-size: 10px; font-weight: 500;
+    padding: 3px 9px; border-radius: 10px; white-space: nowrap;
+  }
+
+  .divider { height: 0.5px; background: var(--border); margin: 12px 0; }
+  .card-how { font-size: 13px; color: var(--text2); line-height: 1.6; }
+
+  .tools { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px; }
+  .tool-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; padding: 3px 8px; border-radius: 6px;
+    background: var(--surface2); color: var(--text2);
+    border: 0.5px solid var(--border);
+  }
+
+  .empty {
+    text-align: center; padding: 48px 24px;
+    color: var(--text3); font-size: 14px;
+    background: var(--surface); border-radius: 12px;
+    border: 0.5px solid var(--border);
+  }
+
+  .priority-flag {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 10px; font-weight: 500; padding: 2px 8px;
+    border-radius: 10px; background: #fff3cd; color: #7a4800;
+    border: 0.5px solid #e8a800;
+  }
+
+  footer {
+    margin-top: 48px; padding-top: 20px;
+    border-top: 0.5px solid var(--border);
+    font-size: 12px; color: var(--text3);
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+  }
+
+  @media (max-width: 600px) {
+    .stats { grid-template-columns: repeat(2,1fr); }
+    h1 { font-size: 22px; }
+  }
 </style>
 </head>
 <body>
 <div class="container">
-<header>
-<div class="eyebrow">Nersio · Course Production Workflow</div>
-<h1>AI Opportunity Audit</h1>
-<p class="subtitle">Every step where AI can assist, automate or replace manual work — filtered by role, impact, effort and timing.</p>
-</header>
-<div class="stats" id="stats"></div>
-<div class="filter-section">
-<div class="filter-label">Role</div>
-<div class="filter-group" id="f-role"></div>
-<div class="filter-label" style="margin-top:12px">Impact</div>
-<div class="filter-group" id="f-impact"></div>
-<div class="filter-label" style="margin-top:12px">Timing</div>
-<div class="filter-group" id="f-timing"></div>
-<div class="filter-label" style="margin-top:12px">Type</div>
-<div class="filter-group" id="f-type"></div>
+
+  <header>
+    <div class="eyebrow">Nersio · Course Production Workflow</div>
+    <h1>AI Opportunity Audit</h1>
+    <p class="subtitle">Every step where AI can assist, automate or replace manual work — filtered by role, impact, effort and timing.</p>
+  </header>
+
+  <div class="stats" id="stats"></div>
+
+  <div class="filter-section">
+    <div class="filter-label">Role</div>
+    <div class="filter-group" id="f-role"></div>
+    <div class="filter-label" style="margin-top:12px">Impact</div>
+    <div class="filter-group" id="f-impact"></div>
+    <div class="filter-label" style="margin-top:12px">Timing</div>
+    <div class="filter-group" id="f-timing"></div>
+    <div class="filter-label" style="margin-top:12px">Type</div>
+    <div class="filter-group" id="f-type"></div>
+  </div>
+
+  <div id="list"></div>
+
+  <footer>
+    <span>Nersio AI Opportunity Audit · April 2026</span>
+    <span>24 opportunities mapped across 8 workflow phases</span>
+  </footer>
 </div>
-<div id="list"></div>
-<footer>
-<span>Nersio AI Opportunity Audit · April 2026</span>
-<span>24 opportunities mapped across 8 workflow phases</span>
-</footer>
-</div>
+
 <script>
 const DATA = [
-{ id:1, phase:"01 — Brief & intake", role:"id", step:"Brief intake & project scope", how:"Connect Claude to ClickUp via MCP to auto-pull all tasks, scope details and materials into a structured brief summary before the ID even opens a doc. Zero manual gathering.", type:"automation", impact:"med", effort:"low", timing:"now", tools:["Claude + ClickUp MCP"] },
-{ id:2, phase:"02 — Analysis & structure", role:"id", step:"Content analysis", how:"Already using id-content-analysis skill. Next step: make it output a structured ID Brief JSON that feeds directly into course structure templates — no manual reformatting needed between steps.", type:"skill", impact:"high", effort:"low", timing:"now", tools:["Claude — id-content-analysis"] },
-{ id:3, phase:"02 — Analysis & structure", role:"id", step:"Audience & learning objectives", how:"Claude drafts learning objectives automatically from the ID Brief. ID reviews and adjusts rather than writing from scratch. Saves 30–60 min per module and ensures alignment with goals.", type:"skill", impact:"med", effort:"low", timing:"now", tools:["Claude"] },
-{ id:4, phase:"02 — Analysis & structure", role:"id", step:"Course structure document", how:"Claude generates a pre-filled course structure template in the right format (Excel/Word) based on training type (Journey/Block/Delta/Micro) and ID Brief. No blank-page problem.", type:"skill", impact:"high", effort:"med", timing:"now", tools:["Claude — new skill needed"] },
-{ id:5, phase:"Training type decision", role:"both", step:"Training type → asset checklist", how:"Once training type is confirmed, Claude auto-generates the full asset checklist for that type (e.g. Journey: X module headers, X badges, X block icons, path image…). Replaces manual list-building.", type:"skill", impact:"med", effort:"low", timing:"now", tools:["Claude — new skill needed"] },
-{ id:6, phase:"03 — Storyboard creation", role:"id", step:"Content writing per step", how:"Claude rewrites and adapts client content into step-level copy using ID brief tone and audience context. ID edits rather than writes from scratch. Already partially done — formalise into a dedicated skill.", type:"skill", impact:"high", effort:"low", timing:"now", tools:["Claude — id-storyboard-generator"] },
-{ id:7, phase:"03 — Storyboard creation", role:"id", step:"Assessment creation", how:"Already using id-quiz-generator. Extend it to auto-suggest assessment type per step based on the learning objective (e.g. recall → T/F, application → D&D, evaluation → constructed response).", type:"skill", impact:"high", effort:"med", timing:"now", tools:["Claude — id-quiz-generator"] },
-{ id:8, phase:"03 — Storyboard creation", role:"id", step:"D&D JSON + SVG", how:"Already fully automated via id-dragdrop-generator. Opportunity: batch mode — generate all D&D tasks for an entire module in one prompt pass rather than one at a time.", type:"skill", impact:"high", effort:"low", timing:"now", tools:["Claude — id-dragdrop-generator"] },
-{ id:9, phase:"03 — Storyboard creation", role:"id", step:"Visual placeholders", how:"Claude auto-suggests visual type per step (diagram, character scene, data viz, icon set) based on content type and tone from the moodboard. ID approves or adjusts rather than deciding from scratch.", type:"skill", impact:"med", effort:"med", timing:"now", tools:["Claude — extend SB generator"] },
-{ id:10, phase:"03 — Storyboard creation", role:"id", step:"Internal SB review & QA", how:"Claude runs a structured review pass: checks every step has an objective, every assessment maps to an objective, tone is consistent, no content gaps. Outputs a QA report with line-level flags.", type:"skill", impact:"high", effort:"med", timing:"now", tools:["Claude — new QA skill"] },
-{ id:11, phase:"02 — Visual setup & branding", role:"dd", step:"Moodboard creation", how:"Claude generates moodboard brief from the ID Brief: font pairing rationale, palette options, tone/energy descriptors, illustration style suggestions. DD uses as a structured starting point in Figma.", type:"skill", impact:"med", effort:"med", timing:"now", tools:["Claude + Figma"] },
-{ id:12, phase:"02 — Visual setup & branding", role:"dd", step:"Color palette per module (Journey)", how:"Claude generates a harmonious multi-module color system from the base palette — ensuring contrast, visual variety and brand consistency across all modules automatically.", type:"skill", impact:"med", effort:"med", timing:"now", tools:["Claude — new skill"] },
-{ id:13, phase:"04 — Figma production", role:"dd", step:"Figma structure scaffolding", how:"Already automated via id-figma-structure-builder plugin. Key open item: confirm step naming convention (P3 S1 vs P1 S1). Then enable batch-run for all modules in one go.", type:"skill", impact:"high", effort:"low", timing:"now", tools:["Claude — id-figma-structure-builder"] },
-{ id:14, phase:"04 — Figma production", role:"dd", step:"SVG / PNG visual creation", how:"Claude already creates production-ready SVGs via nersio-svg-visual-generator. Extend to accept the visual placeholder description directly from the SB and generate without a manual brief.", type:"skill", impact:"high", effort:"med", timing:"now", tools:["Claude — nersio-svg-visual-generator"] },
-{ id:15, phase:"04 — Figma production", role:"dd", step:"Video production", how:"HeyGen Seedance already in use. Build a structured prompt template that generates consistent avatar scripts directly from SB step copy — so there's no manual scripting step between SB and video.", type:"process", impact:"med", effort:"low", timing:"now", tools:["HeyGen + ElevenLabs + Claude"] },
-{ id:16, phase:"04 — Figma production", role:"dd", step:"PDF & job aid creation", how:"Move from Figma to Gamma for AI-generated PDFs. Claude drafts the content from job aid placeholders in the SB, Gamma handles layout. Structured prompt → polished PDF. Much faster than manual Figma layout.", type:"tool", impact:"high", effort:"med", timing:"now", tools:["Gamma + Claude"] },
-{ id:17, phase:"05 — Prototype assembly", role:"both", step:"Copy-pasting visuals Figma → PPT", how:"Biggest friction in the whole workflow. Short-term: DD owns this step (process change). Near-future: Figma plugin exports a structured asset manifest + python-pptx script auto-inserts all visuals into the PPT prototype.", type:"automation", impact:"high", effort:"high", timing:"near", tools:["Figma plugin — new build needed", "python-pptx"] },
-{ id:18, phase:"05 — Prototype assembly", role:"id", step:"Internal prototype QA", how:"Claude reviews the exported prototype against the storyboard: checks all steps present, all visuals placed, all assessments correct. Outputs a structured diff/checklist ready to action.", type:"skill", impact:"med", effort:"med", timing:"near", tools:["Claude — new QA skill"] },
-{ id:19, phase:"06 — LMS / CMS upload", role:"both", step:"CMS structure creation", how:"Manifest-based bulk import: Claude generates a JSON manifest from the approved SB (module/block/step structure), the CMS API reads it and auto-creates the full structure. Zero manual clicking.", type:"automation", impact:"high", effort:"high", timing:"near", tools:["Claude + CMS API — feature request"] },
-{ id:20, phase:"06 — LMS / CMS upload", role:"both", step:"Content & media upload", how:"Same manifest approach: each step's copy and media slot is defined in the manifest, bulk-uploaded in one operation. Replaces the current step-by-step manual copy-paste. This is the existing feature request.", type:"automation", impact:"high", effort:"high", timing:"near", tools:["Bulk Media Import feature request"] },
-{ id:22, phase:"07 — QA & client review", role:"id", step:"Final internal QA", how:"Claude runs a full QA checklist against the uploaded training: checks step count, assessment presence per block, link validity, copy against SB. Outputs a structured fix list with step references.", type:"skill", impact:"high", effort:"med", timing:"near", tools:["Claude — new QA skill"] },
-{ id:23, phase:"07 — QA & client review", role:"id", step:"Client feedback triage", how:"Client leaves comments → Claude categorises them (copy fix / visual fix / structural change / nice-to-have), estimates effort per item, and outputs a prioritised fix list ready to action immediately.", type:"skill", impact:"med", effort:"low", timing:"now", tools:["Claude"] },
-{ id:24, phase:"07 — QA & client review", role:"id", step:"Applying feedback across modules", how:"When a systemic change is needed (tone shift, terminology update across all steps), Claude batch-applies it across the full SB PPT via python-pptx rather than manually finding every instance.", type:"automation", impact:"high", effort:"med", timing:"near", tools:["Claude + python-pptx"] },
+  { id:1, phase:"01 — Brief & intake", role:"id", step:"Brief intake & project scope", how:"Connect Claude to ClickUp via MCP to auto-pull all tasks, scope details and materials into a structured brief summary before the ID even opens a doc. Zero manual gathering.", type:"automation", impact:"med", effort:"low", timing:"now", tools:["Claude + ClickUp MCP"] },
+  { id:2, phase:"02 — Analysis & structure", role:"id", step:"Content analysis", how:"Already using id-content-analysis skill. Next step: make it output a structured ID Brief JSON that feeds directly into course structure templates — no manual reformatting needed between steps.", type:"skill", impact:"high", effort:"low", timing:"now", tools:["Claude — id-content-analysis"] },
+  { id:3, phase:"02 — Analysis & structure", role:"id", step:"Audience & learning objectives", how:"Claude drafts learning objectives automatically from the ID Brief. ID reviews and adjusts rather than writing from scratch. Saves 30–60 min per module and ensures alignment with goals.", type:"skill", impact:"med", effort:"low", timing:"now", tools:["Claude"] },
+  { id:4, phase:"02 — Analysis & structure", role:"id", step:"Course structure document", how:"Claude generates a pre-filled course structure template in the right format (Excel/Word) based on training type (Journey/Block/Delta/Micro) and ID Brief. No blank-page problem.", type:"skill", impact:"high", effort:"med", timing:"now", tools:["Claude — new skill needed"] },
+  { id:5, phase:"Training type decision", role:"both", step:"Training type → asset checklist", how:"Once training type is confirmed, Claude auto-generates the full asset checklist for that type (e.g. Journey: X module headers, X badges, X block icons, path image…). Replaces manual list-building.", type:"skill", impact:"med", effort:"low", timing:"now", tools:["Claude — new skill needed"] },
+  { id:6, phase:"03 — Storyboard creation", role:"id", step:"Content writing per step", how:"Claude rewrites and adapts client content into step-level copy using ID brief tone and audience context. ID edits rather than writes from scratch. Already partially done — formalise into a dedicated skill.", type:"skill", impact:"high", effort:"low", timing:"now", tools:["Claude — id-storyboard-generator"] },
+  { id:7, phase:"03 — Storyboard creation", role:"id", step:"Assessment creation", how:"Already using id-quiz-generator. Extend it to auto-suggest assessment type per step based on the learning objective (e.g. recall → T/F, application → D&D, evaluation → constructed response).", type:"skill", impact:"high", effort:"med", timing:"now", tools:["Claude — id-quiz-generator"] },
+  { id:8, phase:"03 — Storyboard creation", role:"id", step:"D&D JSON + SVG", how:"Already fully automated via id-dragdrop-generator. Opportunity: batch mode — generate all D&D tasks for an entire module in one prompt pass rather than one at a time.", type:"skill", impact:"high", effort:"low", timing:"now", tools:["Claude — id-dragdrop-generator"] },
+  { id:9, phase:"03 — Storyboard creation", role:"id", step:"Visual placeholders", how:"Claude auto-suggests visual type per step (diagram, character scene, data viz, icon set) based on content type and tone from the moodboard. ID approves or adjusts rather than deciding from scratch.", type:"skill", impact:"med", effort:"med", timing:"now", tools:["Claude — extend SB generator"] },
+  { id:10, phase:"03 — Storyboard creation", role:"id", step:"Internal SB review & QA", how:"Claude runs a structured review pass: checks every step has an objective, every assessment maps to an objective, tone is consistent, no content gaps. Outputs a QA report with line-level flags.", type:"skill", impact:"high", effort:"med", timing:"now", tools:["Claude — new QA skill"] },
+  { id:11, phase:"02 — Visual setup & branding", role:"dd", step:"Moodboard creation", how:"Claude generates moodboard brief from the ID Brief: font pairing rationale, palette options, tone/energy descriptors, illustration style suggestions. DD uses as a structured starting point in Figma.", type:"skill", impact:"med", effort:"med", timing:"now", tools:["Claude + Figma"] },
+  { id:12, phase:"02 — Visual setup & branding", role:"dd", step:"Color palette per module (Journey)", how:"Claude generates a harmonious multi-module color system from the base palette — ensuring contrast, visual variety and brand consistency across all modules automatically.", type:"skill", impact:"med", effort:"med", timing:"now", tools:["Claude — new skill"] },
+  { id:13, phase:"04 — Figma production", role:"dd", step:"Figma structure scaffolding", how:"Already automated via id-figma-structure-builder plugin. Key open item: confirm step naming convention (P3 S1 vs P1 S1). Then enable batch-run for all modules in one go.", type:"skill", impact:"high", effort:"low", timing:"now", tools:["Claude — id-figma-structure-builder"] },
+  { id:14, phase:"04 — Figma production", role:"dd", step:"SVG / PNG visual creation", how:"Claude already creates production-ready SVGs via nersio-svg-visual-generator. Extend to accept the visual placeholder description directly from the SB and generate without a manual brief.", type:"skill", impact:"high", effort:"med", timing:"now", tools:["Claude — nersio-svg-visual-generator"] },
+  { id:15, phase:"04 — Figma production", role:"dd", step:"Video production", how:"HeyGen Seedance already in use. Build a structured prompt template that generates consistent avatar scripts directly from SB step copy — so there's no manual scripting step between SB and video.", type:"process", impact:"med", effort:"low", timing:"now", tools:["HeyGen + ElevenLabs + Claude"] },
+  { id:16, phase:"04 — Figma production", role:"dd", step:"PDF & job aid creation", how:"Move from Figma to Gamma for AI-generated PDFs. Claude drafts the content from job aid placeholders in the SB, Gamma handles layout. Structured prompt → polished PDF. Much faster than manual Figma layout.", type:"tool", impact:"high", effort:"med", timing:"now", tools:["Gamma + Claude"] },
+  { id:17, phase:"05 — Prototype assembly", role:"both", step:"Copy-pasting visuals Figma → PPT", how:"Biggest friction in the whole workflow. Short-term: DD owns this step (process change). Near-future: Figma plugin exports a structured asset manifest + python-pptx script auto-inserts all visuals into the PPT prototype.", type:"automation", impact:"high", effort:"high", timing:"near", tools:["Figma plugin — new build needed", "python-pptx"] },
+  { id:18, phase:"05 — Prototype assembly", role:"id", step:"Internal prototype QA", how:"Claude reviews the exported prototype against the storyboard: checks all steps present, all visuals placed, all assessments correct. Outputs a structured diff/checklist ready to action.", type:"skill", impact:"med", effort:"med", timing:"near", tools:["Claude — new QA skill"] },
+  { id:19, phase:"06 — LMS / CMS upload", role:"both", step:"CMS structure creation", how:"Manifest-based bulk import: Claude generates a JSON manifest from the approved SB (module/block/step structure), the CMS API reads it and auto-creates the full structure. Zero manual clicking.", type:"automation", impact:"high", effort:"high", timing:"near", tools:["Claude + CMS API — feature request"] },
+  { id:20, phase:"06 — LMS / CMS upload", role:"both", step:"Content & media upload", how:"Same manifest approach: each step's copy and media slot is defined in the manifest, bulk-uploaded in one operation. Replaces the current step-by-step manual copy-paste. This is the existing feature request.", type:"automation", impact:"high", effort:"high", timing:"near", tools:["Bulk Media Import feature request"] },
+  { id:22, phase:"07 — QA & client review", role:"id", step:"Final internal QA", how:"Claude runs a full QA checklist against the uploaded training: checks step count, assessment presence per block, link validity, copy against SB. Outputs a structured fix list with step references.", type:"skill", impact:"high", effort:"med", timing:"near", tools:["Claude — new QA skill"] },
+  { id:23, phase:"07 — QA & client review", role:"id", step:"Client feedback triage", how:"Client leaves comments → Claude categorises them (copy fix / visual fix / structural change / nice-to-have), estimates effort per item, and outputs a prioritised fix list ready to action immediately.", type:"skill", impact:"med", effort:"low", timing:"now", tools:["Claude"] },
+  { id:24, phase:"07 — QA & client review", role:"id", step:"Applying feedback across modules", how:"When a systemic change is needed (tone shift, terminology update across all steps), Claude batch-applies it across the full SB PPT via python-pptx rather than manually finding every instance.", type:"automation", impact:"high", effort:"med", timing:"near", tools:["Claude + python-pptx"] },
 ];
+
 const TYPES = { skill:"Skill", automation:"Automation", tool:"New tool", process:"Process change" };
 const IMPACTS = { high:"High impact", med:"Medium impact", low:"Low impact" };
 const EFFORTS = { low:"Low effort", med:"Medium effort", high:"High effort" };
 const TIMINGS = { now:"Available now", near:"6–12 months" };
 const ROLES = { id:"ID role", dd:"DD role", both:"Both roles" };
+
 let filters = { role:"all", impact:"all", timing:"all", type:"all" };
+
 const FILTER_CONFIG = [
-  { key:"role", el:"f-role", opts:[["all","All roles"],["id","ID role"],["dd","DD role"],["both","Both"]] },
+  { key:"role",   el:"f-role",   opts:[["all","All roles"],["id","ID role"],["dd","DD role"],["both","Both"]] },
   { key:"impact", el:"f-impact", opts:[["all","All"],["high","High impact"],["med","Medium impact"],["low","Low impact"]] },
   { key:"timing", el:"f-timing", opts:[["all","All"],["now","Available now"],["near","6–12 months"]] },
-  { key:"type", el:"f-type", opts:[["all","All"],["skill","Skill"],["automation","Automation"],["tool","New tool"],["process","Process change"]] },
+  { key:"type",   el:"f-type",   opts:[["all","All"],["skill","Skill"],["automation","Automation"],["tool","New tool"],["process","Process change"]] },
 ];
-function badge(bg, border, color, txt) { return `<span class="badge" style="background:${bg};border:0.5px solid ${border};color:${color}">${txt}</span>`; }
-function roleBadge(r) { if(r==='id') return badge('var(--id-bg)','var(--id-border)','var(--id-text)','ID role'); if(r==='dd') return badge('var(--dd-bg)','var(--dd-border)','var(--dd-text)','DD role'); return badge('var(--both-bg)','var(--both-border)','var(--both-text)','Both roles'); }
-function impactBadge(i) { if(i==='high') return badge('var(--high-bg)','var(--high-border)','var(--high-text)','High impact'); if(i==='med') return badge('var(--med-bg)','var(--med-border)','var(--med-text)','Medium impact'); return badge('var(--low-bg)','var(--low-border)','var(--low-text)','Low impact'); }
-function effortBadge(e) { if(e==='low') return badge('var(--effort-low-bg)','#1f9e6a','var(--effort-low-text)','Low effort'); if(e==='med') return badge('var(--effort-med-bg)','#c47a10','var(--effort-med-text)','Medium effort'); return badge('var(--effort-high-bg)','#c83030','var(--effort-high-text)','High effort'); }
-function timingBadge(t) { if(t==='now') return badge('var(--now-bg)','var(--now-border)','var(--now-text)','Available now'); return badge('var(--near-bg)','var(--near-border)','var(--near-text)','6–12 months'); }
-function typeBadge(t) { return badge('#f0efe9','#cccac0','#5a5852', TYPES[t]); }
-function renderStats(rows) { const high = rows.filter(r=>r.impact==='high').length; const now = rows.filter(r=>r.timing==='now').length; const skill= rows.filter(r=>r.type==='skill').length; document.getElementById('stats').innerHTML = [ {n:rows.length, l:"opportunities"}, {n:high, l:"high impact"}, {n:now, l:"available now"}, {n:skill,l:"Claude skills"}, ].map(x=>`<div class="stat"><div class="stat-n">${x.n}</div><div class="stat-l">${x.l}</div></div>`).join(''); }
-function renderFilters() { FILTER_CONFIG.forEach(cfg => { document.getElementById(cfg.el).innerHTML = cfg.opts.map(([v,l]) => `<button class="filter-btn ${filters[cfg.key]===v?'active':''}" onclick="setFilter('${cfg.key}','${v}')">${l}</button>` ).join('') + `<button class="reset-btn" onclick="resetGroup('${cfg.key}')">Reset</button>`; }); }
+
+function badge(bg, border, color, txt) {
+  return `<span class="badge" style="background:${bg};border:0.5px solid ${border};color:${color}">${txt}</span>`;
+}
+
+function roleBadge(r) {
+  if(r==='id') return badge('var(--id-bg)','var(--id-border)','var(--id-text)','ID role');
+  if(r==='dd') return badge('var(--dd-bg)','var(--dd-border)','var(--dd-text)','DD role');
+  return badge('var(--both-bg)','var(--both-border)','var(--both-text)','Both roles');
+}
+function impactBadge(i) {
+  if(i==='high') return badge('var(--high-bg)','var(--high-border)','var(--high-text)','High impact');
+  if(i==='med')  return badge('var(--med-bg)','var(--med-border)','var(--med-text)','Medium impact');
+  return badge('var(--low-bg)','var(--low-border)','var(--low-text)','Low impact');
+}
+function effortBadge(e) {
+  if(e==='low')  return badge('var(--effort-low-bg)','#1f9e6a','var(--effort-low-text)','Low effort');
+  if(e==='med')  return badge('var(--effort-med-bg)','#c47a10','var(--effort-med-text)','Medium effort');
+  return badge('var(--effort-high-bg)','#c83030','var(--effort-high-text)','High effort');
+}
+function timingBadge(t) {
+  if(t==='now') return badge('var(--now-bg)','var(--now-border)','var(--now-text)','Available now');
+  return badge('var(--near-bg)','var(--near-border)','var(--near-text)','6–12 months');
+}
+function typeBadge(t) {
+  return badge('#f0efe9','#cccac0','#5a5852', TYPES[t]);
+}
+
+function renderStats(rows) {
+  const high = rows.filter(r=>r.impact==='high').length;
+  const now  = rows.filter(r=>r.timing==='now').length;
+  const skill= rows.filter(r=>r.type==='skill').length;
+  document.getElementById('stats').innerHTML = [
+    {n:rows.length, l:"opportunities"},
+    {n:high, l:"high impact"},
+    {n:now,  l:"available now"},
+    {n:skill,l:"Claude skills"},
+  ].map(x=>`<div class="stat"><div class="stat-n">${x.n}</div><div class="stat-l">${x.l}</div></div>`).join('');
+}
+
+function renderFilters() {
+  FILTER_CONFIG.forEach(cfg => {
+    document.getElementById(cfg.el).innerHTML = cfg.opts.map(([v,l]) =>
+      `<button class="filter-btn ${filters[cfg.key]===v?'active':''}" onclick="setFilter('${cfg.key}','${v}')">${l}</button>`
+    ).join('') + `<button class="reset-btn" onclick="resetGroup('${cfg.key}')">Reset</button>`;
+  });
+}
+
 function setFilter(key, val) { filters[key]=val; renderFilters(); renderList(); }
 function resetGroup(key) { filters[key]='all'; renderFilters(); renderList(); }
-function renderList() { let rows = DATA.filter(r => { if(filters.role!=='all' && r.role!==filters.role) return false; if(filters.impact!=='all' && r.impact!==filters.impact) return false; if(filters.timing!=='all' && r.timing!==filters.timing) return false; if(filters.type!=='all' && r.type!==filters.type) return false; return true; }); renderStats(rows); const impactOrder={high:0,med:1,low:2}; const timingOrder={now:0,near:1}; const effortOrder={low:0,med:1,high:2}; rows.sort((a,b) => impactOrder[a.impact]-impactOrder[b.impact] || timingOrder[a.timing]-timingOrder[b.timing] || effortOrder[a.effort]-effortOrder[b.effort] ); const el = document.getElementById('list'); if(!rows.length) { el.innerHTML='<div class="empty">No items match these filters — try resetting one of the groups above.</div>'; return; } let html='', lastPhase=''; for(const r of rows) { if(r.phase!==lastPhase) { html += `<div class="section-head">${r.phase}</div>`; lastPhase = r.phase; } const isQuickWin = r.impact==='high' && r.effort==='low' && r.timing==='now'; html += `<div class="card"><div class="card-top"><div class="card-left"><div class="card-title">${r.step} ${isQuickWin?'<span class="priority-flag">Quick win</span>':''}</div><div class="card-phase">${r.phase}</div></div><div class="badges">${roleBadge(r.role)}${impactBadge(r.impact)}${effortBadge(r.effort)}${timingBadge(r.timing)}${typeBadge(r.type)}</div></div><div class="divider"></div><div class="card-how">${r.how}</div><div class="tools">${r.tools.map(t=>`<span class="tool-tag">${t}</span>`).join('')}</div></div>`; } el.innerHTML = html; }
+
+function renderList() {
+  let rows = DATA.filter(r => {
+    if(filters.role!=='all' && r.role!==filters.role) return false;
+    if(filters.impact!=='all' && r.impact!==filters.impact) return false;
+    if(filters.timing!=='all' && r.timing!==filters.timing) return false;
+    if(filters.type!=='all' && r.type!==filters.type) return false;
+    return true;
+  });
+
+  renderStats(rows);
+
+  const impactOrder={high:0,med:1,low:2};
+  const timingOrder={now:0,near:1};
+  const effortOrder={low:0,med:1,high:2};
+  rows.sort((a,b) =>
+    impactOrder[a.impact]-impactOrder[b.impact] ||
+    timingOrder[a.timing]-timingOrder[b.timing] ||
+    effortOrder[a.effort]-effortOrder[b.effort]
+  );
+
+  const el = document.getElementById('list');
+  if(!rows.length) { el.innerHTML='<div class="empty">No items match these filters — try resetting one of the groups above.</div>'; return; }
+
+  let html='', lastPhase='';
+  for(const r of rows) {
+    if(r.phase!==lastPhase) {
+      html += `<div class="section-head">${r.phase}</div>`;
+      lastPhase = r.phase;
+    }
+    const isQuickWin = r.impact==='high' && r.effort==='low' && r.timing==='now';
+    html += `<div class="card">
+      <div class="card-top">
+        <div class="card-left">
+          <div class="card-title">${r.step} ${isQuickWin?'<span class="priority-flag">Quick win</span>':''}</div>
+          <div class="card-phase">${r.phase}</div>
+        </div>
+        <div class="badges">
+          ${roleBadge(r.role)}
+          ${impactBadge(r.impact)}
+          ${effortBadge(r.effort)}
+          ${timingBadge(r.timing)}
+          ${typeBadge(r.type)}
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="card-how">${r.how}</div>
+      <div class="tools">${r.tools.map(t=>`<span class="tool-tag">${t}</span>`).join('')}</div>
+    </div>`;
+  }
+  el.innerHTML = html;
+}
+
 renderFilters();
 renderList();
 </script>
